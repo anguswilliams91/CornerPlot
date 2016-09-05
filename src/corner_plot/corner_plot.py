@@ -130,7 +130,7 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
 
 
     #Set up the figure
-    fig = plt.figure( num = None, figsize = (plot_height,plot_width))
+    fig = plt.figure( num = None, figsize = figsize)
 
     dim = 2*n_traces - 1
 
