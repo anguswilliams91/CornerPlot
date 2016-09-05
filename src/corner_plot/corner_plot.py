@@ -106,10 +106,6 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
     if axis_labels is None:
         axis_labels = ['']*len(traces)
 
-    #Defines the widths of the plots in inches
-    plot_width = 15.
-    plot_height = 15.
-
     if len(traces) != len(axis_labels):
         print("There must be the same number of axis labels as traces",file=sys.stderr)
 
@@ -118,7 +114,6 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
 
     num_samples = min([ len(trace) for trace in traces])
     n_traces = len(traces)
-
 
     #Set up the figure
     fig = plt.figure( num = None, figsize = figsize)
