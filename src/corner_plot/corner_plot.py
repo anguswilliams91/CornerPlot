@@ -9,7 +9,6 @@ import matplotlib.cm as cm
 import matplotlib.colors as colors 
 
 from matplotlib.ticker import MaxNLocator, FuncFormatter
-from matplotlib.colors import LogNorm
 
 __all__ = ["corner_plot"]
 
