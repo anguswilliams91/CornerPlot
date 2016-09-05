@@ -86,14 +86,13 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
     nbins : int 
         The number of bins to use in each dimension for the histograms.
     figsize : tuple
-        The heigh and width of the plot in inches.
+        The height and width of the plot in inches.
     filled : bool
         If True, the histograms will be filled.
     cmap : str
-        Name of the colormap to use
+        Name of the colormap to use.
     truths : array_like[ndim]
-    	A list of true values. These are marked on the 2D and 1D histograms. If None, 
-    	none are added.
+    	A list of true values. These are marked on the 2D and 1D histograms. If None, none are added.
    	fontsize : float
    		The size font to use for axis labels.
    	tickfontsize : float
