@@ -22,7 +22,7 @@ def confidence_2d(xsamples,ysamples,ax=None,intervals=None,nbins=20,linecolor='k
     H,yedges,xedges = np.histogram2d(ysamples,xsamples,bins=nbins)
 
     #get the contour levels
-    h = H.flatten()[np.argsort(H.flatten())[::-1]]
+    h = np.sort(H.flatten())[::-1]
     cdf = np.cumsum(h)/np.cumsum(h)[-1]
     v = np.array([h[ cdf<=li ][-1] for li in intervals[1:]])[::-1]
     v = np.append(v,h[0])
