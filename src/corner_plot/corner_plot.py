@@ -84,19 +84,19 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
     cmap : str
         Name of the colormap to use.
     truths : array_like[ndim]
-    	A list of true values. These are marked on the 2D and 1D histograms. If None, none are added.
-   	fontsize : float
-   		The size font to use for axis labels.
-   	tickfontsize : float
-   	    The size font to use for tick labels.
-   	nticks : int
-   	    The number of ticks to use on each axis.
-   	linewidth: float
-   	    The width of the lines surrounding the contours and histograms.
-   	wspace : float
-   	    The amount of whitespace to place vertically between subplots.
-   	hspace : float
-   		The amount of whitespace to place horizontally between subplots.
+        A list of true values. These are marked on the 2D and 1D histograms. If None, none are added.
+    fontsize : float
+        The size font to use for axis labels.
+    tickfontsize : float
+        The size font to use for tick labels.
+    nticks : int
+        The number of ticks to use on each axis.
+    linewidth: float
+        The width of the lines surrounding the contours and histograms.
+    wspace : float
+        The amount of whitespace to place vertically between subplots.
+    hspace : float
+        The amount of whitespace to place horizontally between subplots.
     """
 
     major_formatter = FuncFormatter(my_formatter)
