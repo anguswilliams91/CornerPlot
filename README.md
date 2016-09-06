@@ -22,5 +22,5 @@ cp.corner_plot(samples)
 ```
 
 ![Alt text](example.png?raw=true)
-
+![Alt text](example_1.png?raw=true)
 
