@@ -13,7 +13,7 @@ from matplotlib.ticker import MaxNLocator, FuncFormatter
 __all__ = ["corner_plot"]
 
 
-def confidence_2d(xsamples,ysamples,ax=None,intervals=None,nbins=20,linecolor='k',histunder=False,cmap="Blues",filled=False,linewidth=1.):
+def confidence_2d(xsamples,ysamples,ax=None,intervals=None,nbins=20,linecolor='k',histunder=False,cmap="Blues",filled=False,linewidth=1., gradient=False ):
     """Draw confidence intervals at the levels asked from a 2d sample of points (e.g. 
         output of MCMC)"""
 
@@ -37,7 +37,10 @@ def confidence_2d(xsamples,ysamples,ax=None,intervals=None,nbins=20,linecolor='k
             plt.hist2d(xsamples,ysamples,bins=nbins,cmap=cmap)
             plt.contour(xx,yy,H,levels=v,colors=linecolor,extend='max',linewidths=linewidth)
         elif filled:
-            plt.contourf(xx,yy,H,levels=v,cmap=cmap)
+            if gradient:
+                plt.contourf(xx,yy,H,100,cmap=cmap) #many contours for gradient
+            else:
+                plt.contourf(xx,yy,H,levels=v,cmap=cmap)
         else:
             plt.contour(xx,yy,H,levels=v,colors=linecolor,linewidths=linewidth)
     else:
@@ -45,7 +48,10 @@ def confidence_2d(xsamples,ysamples,ax=None,intervals=None,nbins=20,linecolor='k
             ax.hist2d(xsamples,ysamples,bins=nbins,cmap=cmap)
             ax.contour(xx,yy,H,levels=v,colors=linecolor,extend='max',linewidths=linewidth)
         elif filled:
-            ax.contourf(xx,yy,H,levels=v,cmap=cmap)
+            if gradient:
+                ax.contourf(xx,yy,H,100,cmap=cmap)
+            else:
+                ax.contourf(xx,yy,H,levels=v,cmap=cmap)
             ax.contour(xx,yy,H,levels=v,colors=linecolor,extend='max',linewidths=linewidth)
         else:
             ax.contour(xx,yy,H,levels=v,colors=linecolor,linewidths=linewidth)        
@@ -62,8 +68,8 @@ def my_formatter(x, pos):
     else:
         return val_str
 
-def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.,15.), filled=True, cmap="Blues", truths = None,\
-                        fontsize=20 , tickfontsize=15, nticks=4, linewidth=1., linecolor = '0.5', wspace=0.5, hspace=0.5 ):
+def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.,15.), filled=True, gradient=False, cmap="Blues", truths = None,\
+                        fontsize=20 , tickfontsize=15, nticks=4, linewidth=1., linecolor = 'k', wspace=0.5, hspace=0.5 ):
 
     """
     Make a corner plot from MCMC output.
@@ -80,7 +86,9 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
     figsize : tuple
         The height and width of the plot in inches.
     filled : bool
-        If True, the histograms will be filled.
+        If True, the histograms and contours will be filled.
+    gradient: bool
+        If True, then the filled contours will be finely spaced (but the line contours will still be 1 and 2 sigma).
     cmap : str
         Name of the colormap to use.
     truths : array_like[ndim]
@@ -217,7 +225,7 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
                 H, y_edges, x_edges = np.histogram2d( traces[y_var][:num_samples], traces[x_var][:num_samples],\
                                                            bins = nbins )
                 confidence_2d(traces[x_var][:num_samples],traces[y_var][:num_samples],ax=hist_2d_axes[(x_var,y_var)],\
-                    nbins=nbins,intervals=None,linecolor=linecolor,filled=filled,cmap=cmap,linewidth=linewidth)
+                    nbins=nbins,intervals=None,linecolor=linecolor,filled=filled,cmap=cmap,linewidth=linewidth, gradient=gradient)
                 if truths is not None:
                     xlo,xhi = hist_2d_axes[(x_var,y_var)].get_xlim()
                     ylo,yhi = hist_2d_axes[(x_var,y_var)].get_ylim()
