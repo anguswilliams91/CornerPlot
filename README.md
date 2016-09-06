@@ -9,6 +9,18 @@ which will also install missing dependencies. The module is called `corner_plot`
 function is also called `corner_plot` and has an informative docstring. Below is an example output, 
 where samples from a unit, isotropic Gaussian are plotted.
 
+```python
+import corner_plot as cp
+import numpy as np
+
+#draw samples from a unit, isotropic Gaussian
+samples = np.random.multivariate_normal([0.,0.,0.],[[1.,0.,0.],[0.,1.,0.],[0.,0.,1.]],size=1000000)
+
+#plot
+cp.corner_plot(samples)
+
+```
+
 ![Alt text](example.png?raw=true)
 
 
