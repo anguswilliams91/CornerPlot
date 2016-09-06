@@ -63,7 +63,7 @@ def my_formatter(x, pos):
         return val_str
 
 def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.,15.), filled=True, cmap="Blues", truths = None,\
-                        fontsize=20 , tickfontsize=15, nticks=4, linewidth=1., wspace=0.5, hspace=0.5 ):
+                        fontsize=20 , tickfontsize=15, nticks=4, linewidth=1., linecolor = '0.5', wspace=0.5, hspace=0.5 ):
 
     """
     Make a corner plot from MCMC output.
@@ -93,6 +93,8 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
         The number of ticks to use on each axis.
     linewidth: float
         The width of the lines surrounding the contours and histograms.
+    linecolor: str
+        The color of the lines surrounding the contours and histograms.
     wspace : float
         The amount of whitespace to place vertically between subplots.
     hspace : float
@@ -189,7 +191,7 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
     cVal = scalarMap.to_rgba(0.65)
 
     #this one's special, so do it on it's own
-    hist_1d_axes[n_traces - 1].plot(xplot, yplot, color = 'k', lw=linewidth)
+    hist_1d_axes[n_traces - 1].plot(xplot, yplot, color = linecolor, lw=linewidth)
     if filled: hist_1d_axes[n_traces - 1].fill_between(xplot,yplot,color=cVal)
     hist_1d_axes[n_traces - 1].set_xlim( walls[0], walls[-1] )
     hist_1d_axes[n_traces - 1].set_xlabel(axis_labels[-1],fontsize=fontsize)
@@ -215,7 +217,7 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
                 H, y_edges, x_edges = np.histogram2d( traces[y_var][:num_samples], traces[x_var][:num_samples],\
                                                            bins = nbins )
                 confidence_2d(traces[x_var][:num_samples],traces[y_var][:num_samples],ax=hist_2d_axes[(x_var,y_var)],\
-                    nbins=nbins,intervals=None,linecolor='0.5',filled=filled,cmap=cmap,linewidth=linewidth)
+                    nbins=nbins,intervals=None,linecolor=linecolor,filled=filled,cmap=cmap,linewidth=linewidth)
                 if truths is not None:
                     xlo,xhi = hist_2d_axes[(x_var,y_var)].get_xlim()
                     ylo,yhi = hist_2d_axes[(x_var,y_var)].get_ylim()
@@ -249,7 +251,7 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
             yplot[0] = yplot[1]
             yplot[-1] = yplot[-2]
 
-            hist_1d_axes[x_var].plot(xplot, yplot, color = 'k' , lw=linewidth)
+            hist_1d_axes[x_var].plot(xplot, yplot, color = linecolor , lw=linewidth)
             if filled: hist_1d_axes[x_var].fill_between(xplot,yplot,color=cVal)
             hist_1d_axes[x_var].set_xlim( x_edges[0], x_edges[-1] )
             if truths is not None:
