@@ -1,9 +1,9 @@
 # CornerPlot
 A corner plotting routine for MCMC output in `python`. Requires `numpy` and `matplotlib`. 
 
-To install, download the .zip file and then run 
+To install using pip, run
 
-`pip install CornerPlot-master.zip`
+`pip install https://github.com/anguswilliams91/CornerPlot/archive/master.zip`
 
 which will also install missing dependencies. The module is called `corner_plot`. The plotting 
 function is also called `corner_plot` and has an informative docstring. Below is an example output, 
