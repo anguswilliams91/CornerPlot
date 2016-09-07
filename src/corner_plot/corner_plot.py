@@ -38,7 +38,9 @@ def confidence_2d(xsamples,ysamples,ax=None,intervals=None,nbins=20,linecolor='k
             plt.contour(xx,yy,H,levels=v,colors=linecolor,extend='max',linewidths=linewidth)
         elif filled:
             if gradient:
-                plt.contourf(xx,yy,H,100,cmap=cmap) #many contours for gradient
+                cnt = plt.contourf(xx,yy,H,100,cmap=cmap) #many contours for gradient
+                for c in cnt.collections:
+                    c.set_edgecolor("face")
             else:
                 plt.contourf(xx,yy,H,levels=v,cmap=cmap)
         else:
@@ -49,7 +51,9 @@ def confidence_2d(xsamples,ysamples,ax=None,intervals=None,nbins=20,linecolor='k
             ax.contour(xx,yy,H,levels=v,colors=linecolor,extend='max',linewidths=linewidth)
         elif filled:
             if gradient:
-                ax.contourf(xx,yy,H,100,cmap=cmap)
+                cnt = ax.contourf(xx,yy,H,100,cmap=cmap)
+                for c in cnt.collections:
+                    c.set_edgecolor("face")
             else:
                 ax.contourf(xx,yy,H,levels=v,cmap=cmap)
             ax.contour(xx,yy,H,levels=v,colors=linecolor,extend='max',linewidths=linewidth)
@@ -69,7 +73,7 @@ def my_formatter(x, pos):
         return val_str
 
 def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.,15.), filled=True, gradient=False, cmap="Blues", truths = None,\
-                        fontsize=20 , tickfontsize=15, nticks=4, linewidth=1., linecolor = 'k', wspace=0.5, hspace=0.5 ):
+                        fontsize=20 , tickfontsize=15, nticks=4, linewidth=1., linecolor = 'k', markercolor = 'k', wspace=0.5, hspace=0.5 ):
 
     """
     Make a corner plot from MCMC output.
@@ -103,6 +107,8 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
         The width of the lines surrounding the contours and histograms.
     linecolor: str
         The color of the lines surrounding the contours and histograms.
+    markercolor: str
+        The color of the marker at the 'true' values in the 2D subplots.
     wspace : float
         The amount of whitespace to place vertically between subplots.
     hspace : float
@@ -238,11 +244,12 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
                     if truths[y_var]<ylo:
                         dy = ylo - truths[y_var]
                         hist_2d_axes[(x_var,y_var)].set_ylim((ylo-dy-0.05*(yhi-ylo),yhi))
-                    elif truths[y_var]<ylo:
+                    elif truths[y_var]>yhi:
                         dy = truths[y_var] - yhi
                         hist_2d_axes[(x_var,y_var)].set_ylim((ylo,yhi+dy+0.05*(yhi-ylo)))
                     #TODO: deal with the pesky case of a prior edge
-                    hist_2d_axes[(x_var,y_var)].plot( truths[x_var], truths[y_var], '*', color = 'k', markersize = 10 )
+                    hist_2d_axes[(x_var,y_var)].set_axis_bgcolor(scalarMap.to_rgba(0.)) #so that the contours blend
+                    hist_2d_axes[(x_var,y_var)].plot( truths[x_var], truths[y_var], '*', color = markercolor, markersize = 10, markeredgecolor = 'none')
             except KeyError:
                 pass
         if x_var < n_traces - 1:
