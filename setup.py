@@ -6,6 +6,5 @@ setup(
     author="Angus Williams",
     author_email="anguswilliams91@gmail.com",
     packages=['corner_plot'],
-    package_dir={'corner_plot':'src/corner_plot'},
-    install_requires=['numpy','matplotlib']
+    package_dir={'corner_plot':'src/corner_plot'}
     )
