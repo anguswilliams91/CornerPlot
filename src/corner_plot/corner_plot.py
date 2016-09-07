@@ -73,7 +73,8 @@ def my_formatter(x, pos):
         return val_str
 
 def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.,15.), filled=True, gradient=False, cmap="Blues", truths = None,\
-                        fontsize=20 , tickfontsize=15, nticks=4, linewidth=1., linecolor = 'k', markercolor = 'k', wspace=0.5, hspace=0.5 ):
+                fontsize=20 , tickfontsize=15, nticks=4, linewidth=1., truthlinewidth=2., linecolor = 'k', markercolor = 'k', markersize = 10, \
+                wspace=0.5, hspace=0.5 ):
 
     """
     Make a corner plot from MCMC output.
@@ -105,10 +106,14 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
         The number of ticks to use on each axis.
     linewidth: float
         The width of the lines surrounding the contours and histograms.
+    truthlinewidth:
+        The width of the dashed lines in 1D histograms at 'true' values.
     linecolor: str
         The color of the lines surrounding the contours and histograms.
     markercolor: str
         The color of the marker at the 'true' values in the 2D subplots.
+    markersize: float
+        The size of the marker to put on the 2D subplots.
     wspace : float
         The amount of whitespace to place vertically between subplots.
     hspace : float
@@ -221,7 +226,7 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
         elif truths[n_traces-1]>xhi:
             dx = truths[n_traces-1]-xhi
             hist_1d_axes[n_traces-1].set_xlim((xlo,xhi+dx+0.05*(xhi-xlo)))
-        hist_1d_axes[n_traces - 1].axvline(truths[n_traces - 1],ls='--',c='k')
+        hist_1d_axes[n_traces - 1].axvline(truths[n_traces - 1],ls='--',c='k',lw=truthlinewidth)
 
 
     #Now Make the 2D histograms
@@ -249,7 +254,8 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
                         hist_2d_axes[(x_var,y_var)].set_ylim((ylo,yhi+dy+0.05*(yhi-ylo)))
                     #TODO: deal with the pesky case of a prior edge
                     hist_2d_axes[(x_var,y_var)].set_axis_bgcolor(scalarMap.to_rgba(0.)) #so that the contours blend
-                    hist_2d_axes[(x_var,y_var)].plot( truths[x_var], truths[y_var], '*', color = markercolor, markersize = 10, markeredgecolor = 'none')
+                    hist_2d_axes[(x_var,y_var)].plot( truths[x_var], truths[y_var], '*', color = markercolor, markersize = markersize, \
+                        markeredgecolor = 'none')
             except KeyError:
                 pass
         if x_var < n_traces - 1:
@@ -277,7 +283,7 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
                 elif truths[x_var]>xhi:
                     dx = truths[x_var]-xhi
                     hist_1d_axes[x_var].set_xlim((xlo,xhi+dx+0.05*(xhi-xlo)))
-                hist_1d_axes[x_var].axvline(truths[x_var],ls='--',c='k')
+                hist_1d_axes[x_var].axvline(truths[x_var],ls='--',c='k',lw=truthlinewidth)
 
     #Finally Add the Axis Labels
     for x_var in xrange(n_traces - 1):
