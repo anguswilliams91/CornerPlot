@@ -91,7 +91,8 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
     filled : bool
         If True, the histograms and contours will be filled.
     gradient: bool
-        If True, then the filled contours will be finely spaced (but the line contours will still be 1 and 2 sigma).
+        If True, then instead of filled contours, bicubic interpolation is applied to the 2D histograms (appropriate 
+            when your posterior is densely sampled).
     cmap : str
         Name of the colormap to use.
     truths : array_like[ndim]
