@@ -39,7 +39,7 @@ def confidence_2d(xsamples,ysamples,ax=None,intervals=None,nbins=20,linecolor='k
         elif filled:
             if gradient:
                 plt.imshow(H,cmap=cmap,origin='lower',extent=(np.min(xedges),np.max(xedges),np.min(yedges),np.max(yedges)),\
-                    interpolation='bicubic')
+                    interpolation='bicubic',aspect='auto')
             else:
                 plt.contourf(xx,yy,H,levels=v,cmap=cmap)
         else:
@@ -51,7 +51,7 @@ def confidence_2d(xsamples,ysamples,ax=None,intervals=None,nbins=20,linecolor='k
         elif filled:
             if gradient:
                 ax.imshow(H,cmap=cmap,origin='lower',extent=(np.min(xedges),np.max(xedges),np.min(yedges),np.max(yedges)),\
-                    interpolation='bicubic')
+                    interpolation='bicubic',aspect='auto')
             else:
                 ax.contourf(xx,yy,H,levels=v,cmap=cmap)
             ax.contour(xx,yy,H,levels=v,colors=linecolor,extend='max',linewidths=linewidth)
