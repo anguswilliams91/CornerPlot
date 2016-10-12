@@ -33,30 +33,19 @@ def confidence_2d(xsamples,ysamples,ax=None,intervals=None,nbins=20,linecolor='k
     xx,yy = np.meshgrid(xc,yc)
 
     if ax is None:
-        if histunder:
-            plt.hist2d(xsamples,ysamples,bins=nbins,cmap=cmap)
-            plt.contour(xx,yy,H,levels=v,colors=linecolor,extend='max',linewidths=linewidth)
-        elif filled:
-            if gradient:
-                plt.imshow(H,cmap=cmap,origin='lower',extent=(np.min(xedges),np.max(xedges),np.min(yedges),np.max(yedges)),\
+        fig,ax = plt.subplots()
+    if histunder:
+        ax.hist2d(xsamples,ysamples,bins=nbins,cmap=cmap)
+        ax.contour(xx,yy,H,levels=v,colors=linecolor,extend='max',linewidths=linewidth)
+    elif filled:
+        if gradient:
+            ax.imshow(H,cmap=cmap,origin='lower',extent=(np.min(xedges),np.max(xedges),np.min(yedges),np.max(yedges)),\
                     interpolation='bicubic',aspect='auto')
-            else:
-                plt.contourf(xx,yy,H,levels=v,cmap=cmap)
         else:
-            plt.contour(xx,yy,H,levels=v,colors=linecolor,linewidths=linewidth)
+            ax.contourf(xx,yy,H,levels=v,cmap=cmap)
+        ax.contour(xx,yy,H,levels=v,colors=linecolor,extend='max',linewidths=linewidth)
     else:
-        if histunder:
-            ax.hist2d(xsamples,ysamples,bins=nbins,cmap=cmap)
-            ax.contour(xx,yy,H,levels=v,colors=linecolor,extend='max',linewidths=linewidth)
-        elif filled:
-            if gradient:
-                ax.imshow(H,cmap=cmap,origin='lower',extent=(np.min(xedges),np.max(xedges),np.min(yedges),np.max(yedges)),\
-                    interpolation='bicubic',aspect='auto')
-            else:
-                ax.contourf(xx,yy,H,levels=v,cmap=cmap)
-            ax.contour(xx,yy,H,levels=v,colors=linecolor,extend='max',linewidths=linewidth)
-        else:
-            ax.contour(xx,yy,H,levels=v,colors=linecolor,linewidths=linewidth)        
+        ax.contour(xx,yy,H,levels=v,colors=linecolor,linewidths=linewidth)        
 
     return None
 
