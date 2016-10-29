@@ -119,6 +119,10 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
         The amount of whitespace to place vertically between subplots.
     hspace : float
         The amount of whitespace to place horizontally between subplots.
+    scatter: bool
+        If true, do scatter plots instead of contour plots in the 2D projections.
+    scatter_size: float
+        The size of the points in the scatter plot.
     """
 
     major_formatter = FuncFormatter(my_formatter)
