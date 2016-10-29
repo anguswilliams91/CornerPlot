@@ -13,7 +13,8 @@ from matplotlib.ticker import MaxNLocator, FuncFormatter
 __all__ = ["corner_plot"]
 
 
-def confidence_2d(xsamples,ysamples,ax=None,intervals=None,nbins=20,linecolor='k',histunder=False,cmap="Blues",filled=False,linewidth=1., gradient=False ):
+def confidence_2d(xsamples,ysamples,ax=None,intervals=None,nbins=20,linecolor='k',histunder=False,cmap="Blues",filled=False,linewidth=1., gradient=False, \
+                    scatter=False, scatter_size=2. ):
     """Draw confidence intervals at the levels asked from a 2d sample of points (e.g. 
         output of MCMC)"""
 
@@ -26,6 +27,18 @@ def confidence_2d(xsamples,ysamples,ax=None,intervals=None,nbins=20,linecolor='k
     cdf = np.cumsum(h)/np.cumsum(h)[-1]
     v = np.array([h[ cdf<=li ][-1] for li in intervals[1:]])[::-1]
     v = np.append(v,h[0])
+
+    if (not np.all(np.diff(v)>0)) or (scatter is True):
+        #if the contour levels are not monotonically increasing, just do a scatter plot
+        if ax is None:
+            fig,ax = plt.subplots
+        cNorm = colors.Normalize(vmin=0.,vmax=1.)
+        scalarMap = cm.ScalarMappable(norm=cNorm,cmap=cmap)
+        cVal = scalarMap.to_rgba(0.65)
+        ax.plot(xsamples,ysamples,'o',mec='none',mfc=cVal,alpha=0.5,ms=scatter_size)
+        ax.set_xlim((np.min(xedges),np.max(xedges)))
+        ax.set_ylim((np.min(yedges),np.max(yedges)))
+        return None
 
     xc = np.array([.5*(xedges[i]+xedges[i+1]) for i in np.arange(nbins)]) #bin centres
     yc = np.array([.5*(yedges[i]+yedges[i+1]) for i in np.arange(nbins)])
@@ -61,7 +74,7 @@ def my_formatter(x, pos):
 
 def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.,15.), filled=True, gradient=False, cmap="Blues", truths = None,\
                 fontsize=20 , tickfontsize=15, nticks=4, linewidth=1., truthlinewidth=2., linecolor = 'k', markercolor = 'k', markersize = 10, \
-                wspace=0.5, hspace=0.5 ):
+                wspace=0.5, hspace=0.5, scatter=False, scatter_size=2. ):
 
     """
     Make a corner plot from MCMC output.
@@ -224,7 +237,8 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
                 H, y_edges, x_edges = np.histogram2d( traces[y_var][:num_samples], traces[x_var][:num_samples],\
                                                            bins = nbins )
                 confidence_2d(traces[x_var][:num_samples],traces[y_var][:num_samples],ax=hist_2d_axes[(x_var,y_var)],\
-                    nbins=nbins,intervals=None,linecolor=linecolor,filled=filled,cmap=cmap,linewidth=linewidth, gradient=gradient)
+                    nbins=nbins,intervals=None,linecolor=linecolor,filled=filled,cmap=cmap,linewidth=linewidth, gradient=gradient,\
+                    scatter=scatter)
                 if truths is not None:
                     xlo,xhi = hist_2d_axes[(x_var,y_var)].get_xlim()
                     ylo,yhi = hist_2d_axes[(x_var,y_var)].get_ylim()
