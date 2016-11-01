@@ -35,7 +35,7 @@ def confidence_2d(xsamples,ysamples,ax=None,intervals=None,nbins=20,linecolor='k
         cNorm = colors.Normalize(vmin=0.,vmax=1.)
         scalarMap = cm.ScalarMappable(norm=cNorm,cmap=cmap)
         cVal = scalarMap.to_rgba(0.65)
-        ax.plot(xsamples,ysamples,'o',mec='none',mfc=cVal,alpha=0.5,ms=scatter_size)
+        ax.plot(xsamples,ysamples,'o',mec='none',mfc=cVal,alpha=0.5,ms=scatter_size,rasterized=True)
         ax.set_xlim((np.min(xedges),np.max(xedges)))
         ax.set_ylim((np.min(yedges),np.max(yedges)))
         return None
