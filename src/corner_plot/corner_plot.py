@@ -317,7 +317,7 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
                     unit = "$" + unit
                 except:
                     unit=""
-                hist_1d_axes[x_var].set_title("{0:.2f}^{{ +{1:.2f} }}_{{ -{2:.2f} }}$".\
+                hist_1d_axes[x_var].set_title("${0:.2f}^{{ +{1:.2f} }}_{{ -{2:.2f} }}$".\
                                 format(res[x_var][0],res[x_var][1],res[x_var][2])+unit,fontsize=fontsize)  
             hist_1d_axes[x_var].plot(xplot, yplot, color = linecolor , lw=linewidth)
             if filled: hist_1d_axes[x_var].fill_between(xplot,yplot,color=cVal)
