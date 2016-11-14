@@ -243,7 +243,7 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
     if print_values is True:
         try:
             _,unit = axis_labels[n_traces-1].split('/')
-            unit = "$" + unit
+            unit = "$\\," + unit
         except:
             unit=""
         hist_1d_axes[n_traces - 1].set_title("${0:.2f}^{{ +{1:.2f} }}_{{ -{2:.2f} }}$".\
@@ -314,7 +314,7 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
             if print_values is True:
                 try:
                     _,unit = axis_labels[x_var].split('/')
-                    unit = "$" + unit
+                    unit = "$\\," + unit
                 except:
                     unit=""
                 hist_1d_axes[x_var].set_title("${0:.2f}^{{ +{1:.2f} }}_{{ -{2:.2f} }}$".\
