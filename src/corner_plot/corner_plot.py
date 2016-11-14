@@ -344,6 +344,8 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
         plt.setp(hist_2d_axes[(0,y_var)].yaxis.get_majorticklabels(), rotation=45)
         hist_2d_axes[(0,y_var)].yaxis.set_major_locator(MaxNLocator(nticks))
 
+    plt.gcf().subplots_adjust(bottom=0.15) #make sure nothing is getting chopped off
+
     if fname != None:
         if len(fname.split('.')) == 1:
             fname += '.pdf'
