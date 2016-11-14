@@ -87,9 +87,15 @@ def my_formatter(x, pos):
     else:
         return val_str
 
+def chain_results(chain):
+    """Get the results from a chain using the 16th, 50th and 84th percentiles. 
+    For each parameter a tuple is returned (best_fit, +err, -err)"""
+    return np.array(map(lambda v: [v[1],v[2]-v[1],v[1]-v[0]],\
+                zip(*np.percentile(chain,[16,50,84],axis=0))))
+
 def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.,15.), filled=True, gradient=False, cmap="Blues", truths = None,\
                 fontsize=20 , tickfontsize=15, nticks=4, linewidth=1., truthlinewidth=2., linecolor = 'k', markercolor = 'k', markersize = 10, \
-                wspace=0.5, hspace=0.5, scatter=False, scatter_size=2. ):
+                wspace=0.5, hspace=0.5, scatter=False, scatter_size=2., print_values=True ):
 
     """
     Make a corner plot from MCMC output.
@@ -141,6 +147,11 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
     """
 
     major_formatter = FuncFormatter(my_formatter)
+
+    if print_values is True and axis_labels is None:
+        raise Exception("axis_labels must be supplied if print_values is True")
+    elif print_values is True and axis_labels is not None:
+        res = chain_results(chain)
         
     traces = chain.T
 
@@ -189,7 +200,6 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
     hist_1d_axes[n_traces-1].yaxis.set_major_formatter(major_formatter)
 
 
-
     #Remove the ticks from the axes which don't need them
     for x_var in xrange( n_traces -1 ):
         for y_var in xrange( 1, n_traces - 1):
@@ -230,6 +240,16 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
     cVal = scalarMap.to_rgba(0.65)
 
     #this one's special, so do it on it's own
+    if print_values is True:
+        try:
+            parameter,unit = axis_labels[n_traces-1].split('/')
+            parameter += "$"
+            unit = "$" + unit
+        except:
+            parameter = axis_labels[n_traces-1]
+            unit=""
+        hist_1d_axes[n_traces - 1].set_title(parameter+"$={0:.2n}^{{ +{1:.2n} }}_{{ -{2:.2n} }}$".\
+            format(res[n_traces - 1][0],res[n_traces - 1][1],res[n_traces - 1][2])+unit,fontsize=fontsize)    
     hist_1d_axes[n_traces - 1].plot(xplot, yplot, color = linecolor, lw=linewidth)
     if filled: hist_1d_axes[n_traces - 1].fill_between(xplot,yplot,color=cVal)
     hist_1d_axes[n_traces - 1].set_xlim( walls[0], walls[-1] )
@@ -293,6 +313,16 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
             yplot[0] = yplot[1]
             yplot[-1] = yplot[-2]
 
+            if print_values is True:
+                try:
+                    parameter,unit = axis_labels[x_var].split('/')
+                    parameter += "$"
+                    unit = "$" + unit
+                except:
+                    parameter = axis_labels[x_var]
+                    unit=""
+                hist_1d_axes[x_var].set_title(parameter+"$={0:.2n}^{{ +{1:.2n} }}_{{ -{2:.2n} }}$".\
+                                format(res[x_var][0],res[x_var][1],res[x_var][2])+unit,fontsize=fontsize)  
             hist_1d_axes[x_var].plot(xplot, yplot, color = linecolor , lw=linewidth)
             if filled: hist_1d_axes[x_var].fill_between(xplot,yplot,color=cVal)
             hist_1d_axes[x_var].set_xlim( x_edges[0], x_edges[-1] )
