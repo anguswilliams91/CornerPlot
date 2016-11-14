@@ -248,7 +248,7 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
         except:
             parameter = axis_labels[n_traces-1]
             unit=""
-        hist_1d_axes[n_traces - 1].set_title(parameter+"$={0:.2n}^{{ +{1:.2n} }}_{{ -{2:.2n} }}$".\
+        hist_1d_axes[n_traces - 1].set_title(parameter+"$={0:.2f}^{{ +{1:.2f} }}_{{ -{2:.2f} }}$".\
             format(res[n_traces - 1][0],res[n_traces - 1][1],res[n_traces - 1][2])+unit,fontsize=fontsize)    
     hist_1d_axes[n_traces - 1].plot(xplot, yplot, color = linecolor, lw=linewidth)
     if filled: hist_1d_axes[n_traces - 1].fill_between(xplot,yplot,color=cVal)
@@ -321,7 +321,7 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
                 except:
                     parameter = axis_labels[x_var]
                     unit=""
-                hist_1d_axes[x_var].set_title(parameter+"$={0:.2n}^{{ +{1:.2n} }}_{{ -{2:.2n} }}$".\
+                hist_1d_axes[x_var].set_title(parameter+"$={0:.2f}^{{ +{1:.2f} }}_{{ -{2:.2f} }}$".\
                                 format(res[x_var][0],res[x_var][1],res[x_var][2])+unit,fontsize=fontsize)  
             hist_1d_axes[x_var].plot(xplot, yplot, color = linecolor , lw=linewidth)
             if filled: hist_1d_axes[x_var].fill_between(xplot,yplot,color=cVal)
