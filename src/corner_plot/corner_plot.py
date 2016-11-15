@@ -14,7 +14,7 @@ __all__ = ["corner_plot"]
 
 
 def confidence_2d(xsamples,ysamples,ax=None,intervals=None,nbins=20,linecolor='k',histunder=False,cmap="Blues",filled=False,linewidth=1., gradient=False, \
-                    scatter=False, scatter_size=2. ):
+                    scatter=False, scatter_size=2.,scatter_color='k', scatter_alpha=0.5 ):
     """Draw confidence intervals at the levels asked from a 2d sample of points (e.g. 
         output of MCMC)"""
 
@@ -37,7 +37,7 @@ def confidence_2d(xsamples,ysamples,ax=None,intervals=None,nbins=20,linecolor='k
             cNorm = colors.Normalize(vmin=0.,vmax=1.)
             scalarMap = cm.ScalarMappable(norm=cNorm,cmap=cmap)
             cVal = scalarMap.to_rgba(0.65)
-            ax.plot(xsamples,ysamples,'o',mec='none',mfc=cVal,alpha=0.5,ms=scatter_size,rasterized=True)
+            ax.plot(xsamples,ysamples,'o',mec='none',mfc=cVal,alpha=scatter_alpha,ms=scatter_size,rasterized=True)
             ax.set_xlim((np.min(xedges),np.max(xedges)))
             ax.set_ylim((np.min(yedges),np.max(yedges)))
             return None
@@ -47,10 +47,7 @@ def confidence_2d(xsamples,ysamples,ax=None,intervals=None,nbins=20,linecolor='k
         #if the contour levels are not monotonically increasing, just do a scatter plot
         if ax is None:
             fig,ax = plt.subplots
-        cNorm = colors.Normalize(vmin=0.,vmax=1.)
-        scalarMap = cm.ScalarMappable(norm=cNorm,cmap=cmap)
-        cVal = scalarMap.to_rgba(0.65)
-        ax.plot(xsamples,ysamples,'o',mec='none',mfc=cVal,alpha=0.5,ms=scatter_size,rasterized=True)
+        ax.plot(xsamples,ysamples,'o',mec='none',mfc=scatter_color,alpha=scatter_alpha,ms=scatter_size,rasterized=True)
         ax.set_xlim((np.min(xedges),np.max(xedges)))
         ax.set_ylim((np.min(yedges),np.max(yedges)))
         return None
@@ -93,9 +90,9 @@ def chain_results(chain):
     return np.array(map(lambda v: [v[1],v[2]-v[1],v[1]-v[0]],\
                 zip(*np.percentile(chain,[16,50,84],axis=0))))
 
-def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.,15.), filled=True, gradient=False, cmap="Blues", truths = None,\
+def corner_plot( chain, axis_labels=None,  print_values=True, fname = None, nbins=40, figsize = (7.,7.), filled=True, gradient=False, cmap="Blues", truths = None,\
                 fontsize=20 , tickfontsize=15, nticks=4, linewidth=1., truthlinewidth=2., linecolor = 'k', markercolor = 'k', markersize = 10, \
-                wspace=0.5, hspace=0.5, scatter=False, scatter_size=2., print_values=True ):
+                wspace=0.5, hspace=0.5, scatter=False, scatter_size=2., scatter_color='k', scatter_alpha=0.5):
 
     """
     Make a corner plot from MCMC output.
@@ -105,6 +102,9 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
         Samples from an MCMC chain. ndim should be >= 2.
     axis_labels : array_like[ndim]
         Strings corresponding to axis labels.
+    print_values:
+        If True, print median values from 1D posteriors and +/- uncertainties 
+        from the 84th and 16th percentiles above the 1D histograms.
     fname : str 
         The name of the file to save the figure to.
     nbins : int 
@@ -144,13 +144,15 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
         If true, do scatter plots instead of contour plots in the 2D projections.
     scatter_size: float
         The size of the points in the scatter plot.
+    scatter_color: str 
+        The color of the points in the scatter plot. 
+    scatter_alpha: float 
+        The alpha value for the scatter points. 
     """
 
     major_formatter = FuncFormatter(my_formatter)
 
-    if print_values is True and axis_labels is None:
-        raise Exception("axis_labels must be supplied if print_values is True")
-    elif print_values is True and axis_labels is not None:
+    if print_values is True:
         res = chain_results(chain)
         
     traces = chain.T
@@ -234,20 +236,18 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
     yplot[0] = yplot[1]
     yplot[-1] = yplot[-2]
 
-    Cmap = colors.Colormap(cmap)
-    cNorm = colors.Normalize(vmin=0.,vmax=1.)
-    scalarMap = cm.ScalarMappable(norm=cNorm,cmap=cmap)
-    cVal = scalarMap.to_rgba(0.65)
+    if not scatter:
+        Cmap = colors.Colormap(cmap)
+        cNorm = colors.Normalize(vmin=0.,vmax=1.)
+        scalarMap = cm.ScalarMappable(norm=cNorm,cmap=cmap)
+        cVal = scalarMap.to_rgba(0.65)
+    else:
+        cVal = scatter_color
 
     #this one's special, so do it on it's own
     if print_values is True:
-        try:
-            _,unit = axis_labels[n_traces-1].split('/')
-            unit = "$\\," + unit
-        except:
-            unit=""
         hist_1d_axes[n_traces - 1].set_title("${0:.2f}^{{ +{1:.2f} }}_{{ -{2:.2f} }}$".\
-            format(res[n_traces - 1][0],res[n_traces - 1][1],res[n_traces - 1][2])+unit,fontsize=fontsize)    
+            format(res[n_traces - 1][0],res[n_traces - 1][1],res[n_traces - 1][2]),fontsize=fontsize)    
     hist_1d_axes[n_traces - 1].plot(xplot, yplot, color = linecolor, lw=linewidth)
     if filled: hist_1d_axes[n_traces - 1].fill_between(xplot,yplot,color=cVal)
     hist_1d_axes[n_traces - 1].set_xlim( walls[0], walls[-1] )
@@ -275,7 +275,7 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
                                                            bins = nbins )
                 confidence_2d(traces[x_var][:num_samples],traces[y_var][:num_samples],ax=hist_2d_axes[(x_var,y_var)],\
                     nbins=nbins,intervals=None,linecolor=linecolor,filled=filled,cmap=cmap,linewidth=linewidth, gradient=gradient,\
-                    scatter=scatter)
+                    scatter=scatter,scatter_color=scatter_color, scatter_alpha=scatter_alpha)
                 if truths is not None:
                     xlo,xhi = hist_2d_axes[(x_var,y_var)].get_xlim()
                     ylo,yhi = hist_2d_axes[(x_var,y_var)].get_ylim()
@@ -312,13 +312,8 @@ def corner_plot( chain, axis_labels=None, fname = None, nbins=40, figsize = (15.
             yplot[-1] = yplot[-2]
 
             if print_values is True:
-                try:
-                    _,unit = axis_labels[x_var].split('/')
-                    unit = "$\\," + unit
-                except:
-                    unit=""
                 hist_1d_axes[x_var].set_title("${0:.2f}^{{ +{1:.2f} }}_{{ -{2:.2f} }}$".\
-                                format(res[x_var][0],res[x_var][1],res[x_var][2])+unit,fontsize=fontsize)  
+                                format(res[x_var][0],res[x_var][1],res[x_var][2]),fontsize=fontsize)  
             hist_1d_axes[x_var].plot(xplot, yplot, color = linecolor , lw=linewidth)
             if filled: hist_1d_axes[x_var].fill_between(xplot,yplot,color=cVal)
             hist_1d_axes[x_var].set_xlim( x_edges[0], x_edges[-1] )
