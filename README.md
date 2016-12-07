@@ -14,7 +14,7 @@ import corner_plot as cp
 import numpy as np
 
 #draw samples from a unit, isotropic Gaussian
-samples = np.random.multivariate_normal([0.,0.,0.],[[1.,0.,0.],[0.,1.,0.],[0.,0.,1.]],size=1000000)
+samples = np.random.multivariate_normal([10.,5.,100.],[[1.,0.,0.],[0.,1.,0.],[0.,0.,1.]],size=1000000)
 
 #plot
 axis_labels=["$x$","$y$","$z$"]
@@ -27,4 +27,5 @@ cp.corner_plot(samples[::1000],scatter=True,filled=False,scatter_size=2,axis_lab
 
 ![Alt text](example.png?raw=true)
 ![Alt text](example_1.png?raw=true)
+![Alt text](example_2.png?raw=true)
 
