@@ -17,7 +17,11 @@ import numpy as np
 samples = np.random.multivariate_normal([0.,0.,0.],[[1.,0.,0.],[0.,1.,0.],[0.,0.,1.]],size=1000000)
 
 #plot
-cp.corner_plot(samples)
+axis_labels=["$x$","$y$","$z$"]
+cp.corner_plot(samples,axis_labels=axis_labels)
+cp.corner_plot(samples,gradient=True,linewidth=0.,nbins=100,axis_labels=axis_labels)
+cp.corner_plot(samples[::1000],scatter=True,filled=False,scatter_size=2,axis_labels=axis_labels,nbins=10)
+
 
 ```
 

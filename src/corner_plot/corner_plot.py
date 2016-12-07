@@ -275,7 +275,7 @@ def corner_plot( chain, axis_labels=None,  print_values=True, fname = None, nbin
                                                            bins = nbins )
                 confidence_2d(traces[x_var][:num_samples],traces[y_var][:num_samples],ax=hist_2d_axes[(x_var,y_var)],\
                     nbins=nbins,intervals=None,linecolor=linecolor,filled=filled,cmap=cmap,linewidth=linewidth, gradient=gradient,\
-                    scatter=scatter,scatter_color=scatter_color, scatter_alpha=scatter_alpha)
+                    scatter=scatter,scatter_color=scatter_color, scatter_alpha=scatter_alpha, scatter_size=scatter_size)
                 if truths is not None:
                     xlo,xhi = hist_2d_axes[(x_var,y_var)].get_xlim()
                     ylo,yhi = hist_2d_axes[(x_var,y_var)].get_ylim()
