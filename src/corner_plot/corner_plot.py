@@ -353,18 +353,19 @@ def multi_corner_plot(chains, axis_labels=None, chain_labels=None, fname = None,
 
     Parameters
     ----------
-    chain : array_like[nsamples, ndim]
-        Samples from an MCMC chain. ndim should be >= 2.
+    chains : tuple
+        Tuple containing multiple MCMC chains. Each chain should have shape [n_samples,n_dim], although 
+        n_samples need not be the same for each chain. n_dim must be equal for all of the chains and >= 2.
     axis_labels : array_like[ndim]
         Strings corresponding to axis labels.
+    chain_labels: array_like[nchains]
+        Strings corresponding to the MCMC chain labels.
     fname : str 
         The name of the file to save the figure to.
     nbins : int 
         The number of bins to use in each dimension for the histograms.
     figsize : tuple
         The height and width of the plot in inches.
-    cmap : str
-        Name of the colormap to use.
     truths : array_like[ndim]
         A list of true values. These are marked on the 2D and 1D histograms. If None, none are added.
     fontsize : float
@@ -382,7 +383,7 @@ def multi_corner_plot(chains, axis_labels=None, chain_labels=None, fname = None,
     truthcolor: str
         The color of the marker at the 'true' values in the 2D subplots and the dashed line in the 1D subplots.
     markersize: float
-        The size of the marker to put on the 2D subplots.
+        The size of the marker to put on the 2D subplots for the 'true' value.
     wspace : float
         The amount of whitespace to place vertically between subplots.
     hspace : float
