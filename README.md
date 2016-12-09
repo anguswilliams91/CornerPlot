@@ -44,9 +44,8 @@ cp.multi_corner_plot(chains,axis_labels=["$x$","$y$","$z$"],linewidth=2.,\
                                             chain_labels=["data 1","data 2","data 3"])
 
 ```
-
-![Alt text](example.png?raw=true)
-![Alt text](example_1.png?raw=true)
-![Alt text](example_2.png?raw=true)
-![Alt text](example_3.png?raw=true)
+![example](https://cloud.githubusercontent.com/assets/6830677/21053340/e84bade8-be20-11e6-9eed-58cdc4e3ad2f.png)
+![example_1](https://cloud.githubusercontent.com/assets/6830677/21053349/f16a7c42-be20-11e6-9b65-8c62c696ac2f.png)
+![example_2](https://cloud.githubusercontent.com/assets/6830677/21053354/f582cf6e-be20-11e6-927b-55805f3f22b1.png)
+![example_3](https://cloud.githubusercontent.com/assets/6830677/21053362/fb482d04-be20-11e6-95b1-b2e2be46529b.png)
 
