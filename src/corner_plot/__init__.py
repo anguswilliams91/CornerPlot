@@ -1,1 +1,1 @@
-from .corner_plot import corner_plot
+from .corner_plot import corner_plot, multi_corner_plot

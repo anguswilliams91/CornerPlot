@@ -11,7 +11,7 @@ import matplotlib as mpl
 
 from matplotlib.ticker import MaxNLocator, FuncFormatter
 
-__all__ = ["corner_plot"]
+__all__ = ["corner_plot","multi_corner_plot"]
 
 
 def confidence_2d(xsamples,ysamples,ax=None,intervals=None,nbins=20,linecolor='k',histunder=False,cmap="Blues",filled=False,linewidth=1., gradient=False, \
