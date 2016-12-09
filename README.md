@@ -25,7 +25,25 @@ cp.corner_plot(samples[::1000],scatter=True,filled=False,scatter_size=2,axis_lab
 
 ```
 
+If you have constrained the same model with different data sets, you can now plot the inference from each 
+data set on the same corner plot to compare the results. This is implemented in a function `multi_corner_plot`. 
+Example:
+
+```python
+
+import corner_plot as cp
+import numpy as np
+
+samples = np.random.multivariate_normal([10.,21.,101.],[[1.,0.,0.],[0.,1.,0.],[0.,0.,1.]],size=1000000)
+samples1 = np.random.multivariate_normal([12.,20.,100.],[[1.,0.,0.],[0.,1.,0.],[0.,0.,1.]],size=1000000)
+samples2 = np.random.multivariate_normal([9.,22.,98.],[[1.,0.,0.],[0.,1.,0.],[0.,0.,1.]],size=1000000)
+
+cp.multi_corner_plot(chains,axis_labels=["$x$","$y$","$z$"],linewidth=2.,chain_labels=["data 1","data 2","data 3"])
+
+```
+
 ![Alt text](example.png?raw=true)
 ![Alt text](example_1.png?raw=true)
 ![Alt text](example_2.png?raw=true)
+![Alt text](example_3.png?raw=true)
 
