@@ -38,7 +38,10 @@ samples = np.random.multivariate_normal([10.,21.,101.],[[1.,0.,0.],[0.,1.,0.],[0
 samples1 = np.random.multivariate_normal([12.,20.,100.],[[1.,0.,0.],[0.,1.,0.],[0.,0.,1.]],size=1000000)
 samples2 = np.random.multivariate_normal([9.,22.,98.],[[1.,0.,0.],[0.,1.,0.],[0.,0.,1.]],size=1000000)
 
-cp.multi_corner_plot(chains,axis_labels=["$x$","$y$","$z$"],linewidth=2.,chain_labels=["data 1","data 2","data 3"])
+chains = (samples,samples1,samples2)
+
+cp.multi_corner_plot(chains,axis_labels=["$x$","$y$","$z$"],linewidth=2.,\
+                                            chain_labels=["data 1","data 2","data 3"])
 
 ```
 
