@@ -44,8 +44,10 @@ cp.multi_corner_plot(chains,axis_labels=["$x$","$y$","$z$"],linewidth=2.,\
                                             chain_labels=["data 1","data 2","data 3"])
 
 ```
-![example](https://cloud.githubusercontent.com/assets/6830677/21053340/e84bade8-be20-11e6-9eed-58cdc4e3ad2f.png)
-![example_1](https://cloud.githubusercontent.com/assets/6830677/21053349/f16a7c42-be20-11e6-9b65-8c62c696ac2f.png)
-![example_2](https://cloud.githubusercontent.com/assets/6830677/21053354/f582cf6e-be20-11e6-927b-55805f3f22b1.png)
-![example_3](https://cloud.githubusercontent.com/assets/6830677/21053362/fb482d04-be20-11e6-95b1-b2e2be46529b.png)
+![default](https://cloud.githubusercontent.com/assets/6830677/21099547/b64998a8-c066-11e6-8f67-f2a71d960bad.png)
+![gradient](https://cloud.githubusercontent.com/assets/6830677/21099550/ba42d17c-c066-11e6-875c-60e295be0890.png)
+![scatter](https://cloud.githubusercontent.com/assets/6830677/21099553/bdfe71a4-c066-11e6-8797-83ac1010cc84.png)
+![multi](https://cloud.githubusercontent.com/assets/6830677/21099555/c0ab494a-c066-11e6-880f-b0656e55f0bd.png)
+
+
 
