@@ -612,4 +612,4 @@ def multi_corner_plot(chains, axis_labels=None, chain_labels=None, fname = None,
             fname += '.pdf'
         plt.savefig(fname, transparent=True)
 
-    return fig,hist_1d_axes,hist_2d_axes
+    return None
