@@ -518,6 +518,18 @@ def multi_corner_plot(chains, axis_labels=None, chain_labels=None, fname = None,
                     if z==0:
                         hist_2d_axes[(x_var,y_var)].set_xlim( x_edges[0], x_edges[-1] )
                         hist_2d_axes[(x_var,y_var)].set_ylim( y_edges[0], y_edges[-1] )
+                    xlo,xhi = hist_2d_axes[(x_var,y_var)].get_xlim()
+                    if x_edges[0]<xlo:
+                        xlo = x_edges[0]
+                    if x_edges[-1]>xhi:
+                        xhi = x_edges[-1]
+                    hist_2d_axes[(x_var,y_var)].set_xlim( xlo,xhi )
+                    ylo,yhi = hist_2d_axes[(x_var,y_var)].get_ylim()
+                    if y_edges[0]<ylo:
+                        ylo = y_edges[0]
+                    if y_edges[-1]>yhi:
+                        yhi = y_edges[-1]
+                    hist_2d_axes[(x_var,y_var)].set_ylim( ylo,yhi )                   
                     if truths is not None:
                         xlo,xhi = hist_2d_axes[(x_var,y_var)].get_xlim()
                         ylo,yhi = hist_2d_axes[(x_var,y_var)].get_ylim()
@@ -600,4 +612,4 @@ def multi_corner_plot(chains, axis_labels=None, chain_labels=None, fname = None,
             fname += '.pdf'
         plt.savefig(fname, transparent=True)
 
-    return None
+    return fig,hist_1d_axes,hist_2d_axes
