@@ -154,6 +154,9 @@ def corner_plot( chain, weights=None, axis_labels=None,  print_values=True, fnam
 
     major_formatter = FuncFormatter(my_formatter)
 
+    if weights is not None:
+        print_values = False #current method for extracting results won't work for that
+
     if print_values is True:
         res = chain_results(chain)
         
