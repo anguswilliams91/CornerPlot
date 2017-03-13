@@ -374,7 +374,9 @@ def multi_corner_plot(chains, weights=None, axis_labels=None, chain_labels=None,
     fname : str 
         The name of the file to save the figure to.
     nbins : int 
-        The number of bins to use in each dimension for the histograms.
+        The number of bins to use in each dimension for the histograms. If a single number is passed, then 
+        the same number of bins is used for each chain. If a list [n1,n2,...] is passed, then ni bins is used 
+        for chain i.
     figsize : tuple
         The height and width of the plot in inches.
     truths : array_like[ndim]
@@ -405,6 +407,12 @@ def multi_corner_plot(chains, weights=None, axis_labels=None, chain_labels=None,
 
     if weights is None:
         weights = (None,)*len(chains)
+
+    try:
+        len(nbins)
+    except:
+        nbins = np.ones(len(chains))*nbins 
+
 
     if linecolors is None:
         linecolors = [list(mpl.rcParams['axes.prop_cycle'])[i]['color'] for i in np.arange(len(chains))]
@@ -481,11 +489,11 @@ def multi_corner_plot(chains, weights=None, axis_labels=None, chain_labels=None,
         #Do the plotting
         #Firstly make the 1D histograms
         num_samples = min([ len(trace) for trace in traces])
-        vals, walls = np.histogram(traces[-1][:num_samples], bins=nbins, weights=weights[z], normed = True)
+        vals, walls = np.histogram(traces[-1][:num_samples], bins=nbins[z], weights=weights[z], normed = True)
 
-        xplot = np.zeros( nbins*2 + 2 )
-        yplot = np.zeros( nbins*2 + 2 )
-        for i in xrange(1, nbins * 2 + 1 ):
+        xplot = np.zeros( nbins[z]*2 + 2 )
+        yplot = np.zeros( nbins[z]*2 + 2 )
+        for i in xrange(1, nbins[z] * 2 + 1 ):
             xplot[i] = walls[int((i-1)/2)]
             yplot[i] = vals[int((i-2)/2)]
 
@@ -519,9 +527,9 @@ def multi_corner_plot(chains, weights=None, axis_labels=None, chain_labels=None,
             for y_var in xrange( n_traces):
                 try:
                     H, y_edges, x_edges = np.histogram2d( traces[y_var][:num_samples], traces[x_var][:num_samples],\
-                                                               weights=weights[z], bins = nbins )
+                                                               weights=weights[z], bins = nbins[z] )
                     confidence_2d(traces[x_var][:num_samples],traces[y_var][:num_samples],weights=weights[z],ax=hist_2d_axes[(x_var,y_var)],\
-                        nbins=nbins,intervals=None,linecolor=linecolors[z],filled=False,cmap="Blues",linewidth=linewidth, gradient=False,\
+                        nbins=nbins[z],intervals=None,linecolor=linecolors[z],filled=False,cmap="Blues",linewidth=linewidth, gradient=False,\
                         scatter=False,scatter_color='k', scatter_alpha=0., scatter_size=0.1)
                     if z==0:
                         hist_2d_axes[(x_var,y_var)].set_xlim( x_edges[0], x_edges[-1] )
@@ -559,11 +567,11 @@ def multi_corner_plot(chains, weights=None, axis_labels=None, chain_labels=None,
                 except KeyError:
                     pass
             if x_var < n_traces - 1:
-                vals, walls = np.histogram( traces[x_var][:num_samples], bins=nbins, weights=weights[z], normed = True )
+                vals, walls = np.histogram( traces[x_var][:num_samples], bins=nbins[z], weights=weights[z], normed = True )
 
-                xplot = np.zeros( nbins*2 + 2 )
-                yplot = np.zeros( nbins*2 + 2 )
-                for i in xrange(1, nbins * 2 + 1 ):
+                xplot = np.zeros( nbins[z]*2 + 2 )
+                yplot = np.zeros( nbins[z]*2 + 2 )
+                for i in xrange(1, nbins[z] * 2 + 1 ):
                     xplot[i] = walls[int((i-1)/2)]
                     yplot[i] = vals[int((i-2)/2)]
 
