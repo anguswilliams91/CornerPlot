@@ -410,9 +410,9 @@ def multi_corner_plot(chains, weights=None, axis_labels=None, chain_labels=None,
         weights = (None,)*len(chains)
 
     try:
-        len(nbins)
+        assert len(nbins) == len(chains)
     except:
-        nbins = np.ones(len(chains))*nbins 
+        nbins = (np.ones(len(chains))*nbins).astype(int)
 
 
     if linecolors is None:
