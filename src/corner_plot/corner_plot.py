@@ -13,8 +13,9 @@ from matplotlib.ticker import MaxNLocator, FuncFormatter
 
 __all__ = ["corner_plot","multi_corner_plot"]
 
-def confidence_2d(xsamples,ysamples,ax=None,weights=None,intervals=None,nbins=20,linecolor='k',histunder=False,cmap="Blues",filled=False,linewidth=1., gradient=False, \
-                    scatter=False, scatter_size=2.,scatter_color='k', scatter_alpha=0.5 ):
+def confidence_2d(xsamples,ysamples,ax=None,weights=None,intervals=None,nbins=20,linecolor='k',\
+                   cmap="Blues",filled=False,linewidth=1., gradient=False, scatter=False, \
+                   scatter_size=2.,scatter_color='k', scatter_alpha=0.5 ):
     """Draw confidence intervals at the levels asked from a 2d sample of points (e.g. 
         output of MCMC)"""
 
@@ -32,22 +33,22 @@ def confidence_2d(xsamples,ysamples,ax=None,weights=None,intervals=None,nbins=20
             if not np.all(np.diff(v)>0.):
                 raise RuntimeError() 
         except:
-            if ax is None:
-                fig,ax = plt.subplots
             cNorm = colors.Normalize(vmin=0.,vmax=1.)
             scalarMap = cm.ScalarMappable(norm=cNorm,cmap=cmap)
             cVal = scalarMap.to_rgba(0.65)
-            ax.plot(xsamples,ysamples,'o',mec='none',mfc=cVal,alpha=scatter_alpha,ms=scatter_size,rasterized=True)
+            ax.plot(xsamples,ysamples,'o',mec='none',mfc=cVal,alpha=scatter_alpha,ms=scatter_size,\
+                    rasterized=True)
             ax.set_xlim((np.min(xedges),np.max(xedges)))
             ax.set_ylim((np.min(yedges),np.max(yedges)))
             return None
 
 
-    if scatter is True:
+    else:
         #if the contour levels are not monotonically increasing, just do a scatter plot
         if ax is None:
             fig,ax = plt.subplots
-        ax.plot(xsamples,ysamples,'o',mec='none',mfc=scatter_color,alpha=scatter_alpha,ms=scatter_size,rasterized=True)
+        ax.plot(xsamples,ysamples,'o',mec='none',mfc=scatter_color,alpha=scatter_alpha,ms=scatter_size,\
+                rasterized=True)
         ax.set_xlim((np.min(xedges),np.max(xedges)))
         ax.set_ylim((np.min(yedges),np.max(yedges)))
         return None
@@ -57,15 +58,10 @@ def confidence_2d(xsamples,ysamples,ax=None,weights=None,intervals=None,nbins=20
 
     xx,yy = np.meshgrid(xc,yc)
 
-    if ax is None:
-        fig,ax = plt.subplots()
-    if histunder:
-        ax.hist2d(xsamples,ysamples,bins=nbins,weights=weights,cmap=cmap)
-        ax.contour(xx,yy,H,levels=v,colors=linecolor,extend='max',linewidths=linewidth)
-    elif filled:
+    if filled:
         if gradient:
-            ax.imshow(H,cmap=cmap,origin='lower',extent=(np.min(xedges),np.max(xedges),np.min(yedges),np.max(yedges)),\
-                    interpolation='bicubic',aspect='auto')
+            ax.imshow(H,cmap=cmap,origin='lower',extent=(np.min(xedges),np.max(xedges),np.min(yedges),\
+                      np.max(yedges)),interpolation='bicubic',aspect='auto')
         else:
             ax.contourf(xx,yy,H,levels=v,cmap=cmap)
         ax.contour(xx,yy,H,levels=v,colors=linecolor,extend='max',linewidths=linewidth)
@@ -90,9 +86,11 @@ def chain_results(chain):
     return np.array(map(lambda v: [v[1],v[2]-v[1],v[1]-v[0]],\
                 zip(*np.percentile(chain,[16,50,84],axis=0))))
 
-def corner_plot( chain, weights=None, axis_labels=None,  print_values=True, fname = None, nbins=40, figsize = (7.,7.), filled=True, gradient=False, cmap="Blues", truths = None,\
-                fontsize=20 , tickfontsize=15, nticks=4, linewidth=1., truthlinewidth=2., linecolor = 'k', markercolor = 'k', markersize = 10, \
-                wspace=0.5, hspace=0.5, scatter=False, scatter_size=2., scatter_color='k', scatter_alpha=0.5):
+def corner_plot( chain, weights=None, axis_labels=None,  print_values=True, fname = None, nbins=40, \
+                 figsize = (7.,7.), filled=True, gradient=False, cmap="Blues", truths = None,\
+                 fontsize=20 , tickfontsize=15, nticks=4, linewidth=1., truthlinewidth=2., linecolor = 'k', \
+                 markercolor = 'k', markersize = 10, wspace=0.5, hspace=0.5, scatter=False, scatter_size=2., \
+                 scatter_color='k', scatter_alpha=0.5):
 
     """
     Make a corner plot from MCMC output.
@@ -278,9 +276,10 @@ def corner_plot( chain, weights=None, axis_labels=None,  print_values=True, fnam
             try:
                 H, y_edges, x_edges = np.histogram2d( traces[y_var][:num_samples], traces[x_var][:num_samples],\
                                                            weights=weights, bins = nbins )
-                confidence_2d(traces[x_var][:num_samples],traces[y_var][:num_samples],weights=weights,ax=hist_2d_axes[(x_var,y_var)],\
-                    nbins=nbins,intervals=None,linecolor=linecolor,filled=filled,cmap=cmap,linewidth=linewidth, gradient=gradient,\
-                    scatter=scatter,scatter_color=scatter_color, scatter_alpha=scatter_alpha, scatter_size=scatter_size)
+                confidence_2d(traces[x_var][:num_samples],traces[y_var][:num_samples],weights=weights,\
+                    ax=hist_2d_axes[(x_var,y_var)],nbins=nbins,intervals=None,linecolor=linecolor,\
+                    filled=filled,cmap=cmap,linewidth=linewidth, gradient=gradient,scatter=scatter,\
+                    scatter_color=scatter_color, scatter_alpha=scatter_alpha, scatter_size=scatter_size)
                 hist_2d_axes[(x_var,y_var)].set_xlim( x_edges[0], x_edges[-1] )
                 hist_2d_axes[(x_var,y_var)].set_ylim( y_edges[0], y_edges[-1] )
                 if truths is not None:
@@ -300,8 +299,9 @@ def corner_plot( chain, weights=None, axis_labels=None,  print_values=True, fnam
                         hist_2d_axes[(x_var,y_var)].set_ylim((ylo,yhi+dy+0.05*(yhi-ylo)))
                     #TODO: deal with the pesky case of a prior edge
                     hist_2d_axes[(x_var,y_var)].set_axis_bgcolor(scalarMap.to_rgba(0.)) #so that the contours blend
-                    hist_2d_axes[(x_var,y_var)].plot( truths[x_var], truths[y_var], '*', color = markercolor, markersize = markersize, \
-                        markeredgecolor = 'none')
+                    hist_2d_axes[(x_var,y_var)].plot( truths[x_var], truths[y_var], '*',\
+                                 color = markercolor, markersize = markersize, \
+                                 markeredgecolor = 'none')
             except KeyError:
                 pass
         if x_var < n_traces - 1:
@@ -355,9 +355,10 @@ def corner_plot( chain, weights=None, axis_labels=None,  print_values=True, fnam
 
     return None
 
-def multi_corner_plot(chains, weights=None, axis_labels=None, chain_labels=None, fname = None, nbins=40, figsize = (7.,7.), truths = None,fontsize=20 , tickfontsize=15,\
-                      nticks=4, linewidth=1., truthlinewidth=2., linecolors = None, truthcolor = 'k', markersize = 10, wspace=0.5,\
-                      hspace=0.5):
+def multi_corner_plot(chains, weights=None, axis_labels=None, chain_labels=None, fname = None, \
+                      nbins=40, figsize = (7.,7.), truths = None,fontsize=20 , tickfontsize=15,\
+                      nticks=4, linewidth=1., truthlinewidth=2., linecolors = None, truthcolor = 'k', \
+                      markersize = 10, wspace=0.5, hspace=0.5):
 
     """
     Plot the results of several chains at once.
@@ -519,7 +520,8 @@ def multi_corner_plot(chains, weights=None, axis_labels=None, chain_labels=None,
                 dx = truths[n_traces-1]-xhi
                 hist_1d_axes[n_traces-1].set_xlim((xlo,xhi+dx+0.05*(xhi-xlo)))
             if z==0:
-                hist_1d_axes[n_traces - 1].axvline(truths[n_traces - 1],ls='--',c=truthcolor,lw=truthlinewidth,zorder=100)
+                hist_1d_axes[n_traces - 1].axvline(truths[n_traces - 1],ls='--',c=truthcolor,\
+                    lw=truthlinewidth,zorder=100)
 
 
         #Now Make the 2D histograms
@@ -528,9 +530,10 @@ def multi_corner_plot(chains, weights=None, axis_labels=None, chain_labels=None,
                 try:
                     H, y_edges, x_edges = np.histogram2d( traces[y_var][:num_samples], traces[x_var][:num_samples],\
                                                                weights=weights[z], bins = nbins[z] )
-                    confidence_2d(traces[x_var][:num_samples],traces[y_var][:num_samples],weights=weights[z],ax=hist_2d_axes[(x_var,y_var)],\
-                        nbins=nbins[z],intervals=None,linecolor=linecolors[z],filled=False,cmap="Blues",linewidth=linewidth, gradient=False,\
-                        scatter=False,scatter_color='k', scatter_alpha=0., scatter_size=0.1)
+                    confidence_2d(traces[x_var][:num_samples],traces[y_var][:num_samples],weights=weights[z],\
+                        ax=hist_2d_axes[(x_var,y_var)],nbins=nbins[z],intervals=None,linecolor=linecolors[z],\
+                        filled=False,cmap="Blues",linewidth=linewidth, gradient=False,scatter=False,scatter_color='k', \
+                        scatter_alpha=0., scatter_size=0.1)
                     if z==0:
                         hist_2d_axes[(x_var,y_var)].set_xlim( x_edges[0], x_edges[-1] )
                         hist_2d_axes[(x_var,y_var)].set_ylim( y_edges[0], y_edges[-1] )
@@ -562,7 +565,8 @@ def multi_corner_plot(chains, weights=None, axis_labels=None, chain_labels=None,
                             dy = truths[y_var] - yhi
                             hist_2d_axes[(x_var,y_var)].set_ylim((ylo,yhi+dy+0.05*(yhi-ylo)))
                         if z==0:
-                            hist_2d_axes[(x_var,y_var)].plot( truths[x_var], truths[y_var], '*', color = truthcolor, markersize = markersize, \
+                            hist_2d_axes[(x_var,y_var)].plot( truths[x_var], truths[y_var], '*', \
+                                color = truthcolor, markersize = markersize, \
                                 markeredgecolor = 'none',zorder=100)
                 except KeyError:
                     pass
